@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Body } from '@nestjs/common';
 import { BoardsService } from './boards.service';
 import { Board } from './board.model'
+import { CreateBoardDto } from './dto/create-board.dto'
 
 @Controller('boards') //1 요청이 처음 걸러지는곳 (boards)
 export class BoardsController {
@@ -21,11 +22,10 @@ export class BoardsController {
 	
 	@Post() // 테스트를 위한 post 요청은 postman 프로그램을 이용한다.
 	createBoard(
-		@Body('title') title: string, 
-		@Body('description') description:string
+		@Body() createBoardDto: CreateBoardDto
 	): Board {
 		// express 에서 reqest의 body는 req.body 라고 bodyParser 로 받아옴
 		// Nestjs에서는 @Body('title') 하면 title에 대한 정보를 받고, @Body () 로 하면 모든 값을 받아올 수 있다.
-		return this.boardsService.createBoard(title, description);
+		return this.boardsService.createBoard(createBoardDto);
 	}
 }
