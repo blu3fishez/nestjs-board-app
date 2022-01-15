@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Post, Body } from '@nestjs/common';
 import { BoardsService } from './boards.service';
 import { Board } from './board.model'
 
@@ -9,9 +9,23 @@ export class BoardsController {
 	) {}
 	
 	@Get('/') // root일 경우 이 부분의 핸들러가 시행된다.
-	getAllBoard(): Board[] {
+	getAllBoard(): string {
 		// service를 이용하여 요청 해결
-		return this.boardsService.getAllBoards();
+		return this.boardsService.getAllBoards() + `<form action="" method="post">
+        <input type="text" name="title">
+        <input type="text" name="description">
+        <button type="submit" value="submit">   
+    </form>`;
 		// controller에서 return 한 값이 브라우저에서 볼 수 있게된다.
+	}
+	
+	@Post() // 테스트를 위한 post 요청은 postman 프로그램을 이용한다.
+	createBoard(
+		@Body('title') title: string, 
+		@Body('description') description:string
+	): Board {
+		// express 에서 reqest의 body는 req.body 라고 bodyParser 로 받아옴
+		// Nestjs에서는 @Body('title') 하면 title에 대한 정보를 받고, @Body () 로 하면 모든 값을 받아올 수 있다.
+		return this.boardsService.createBoard(title, description);
 	}
 }
