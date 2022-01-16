@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Query, Delete } from '@nestjs/common';
 import { BoardsService } from './boards.service';
 import { Board } from './board.model'
 import { CreateBoardDto } from './dto/create-board.dto'
@@ -16,7 +16,7 @@ export class BoardsController {
         <input type="text" name="title">
         <input type="text" name="description">
         <button type="submit" value="submit">   
-    </form>`;
+    </form>` + `<div>삭제하기 : </div>`;
 		// controller에서 return 한 값이 브라우저에서 볼 수 있게된다.
 	}
 	
@@ -29,10 +29,16 @@ export class BoardsController {
 		return this.boardsService.createBoard(createBoardDto);
 	}
 	
-	@Get('/') // URL의 와일드셋(파라미터)을 가져오는 방법
+	@Get('/:id') // URL의 와일드셋(파라미터)을 가져오는 방법
 	// 쿼리스트링도 @Param('id') 와 같이 가져오면된다.
 	// @Param() 은 string 배열을 반환한다.
-	getBoardById(@Query('id') id: string): Board{
+	getBoardById(@Param('id') id: string): Board{
 		return this.boardsService.getBoardById(id);
+	}
+	
+	@Delete('/:id')
+	deleteBoard(@Param('id') id: string): string {
+		this.boardsService.deleteBoard(id);
+		return `<p>게시물이 삭제되었습니다. id : ${id}<br></p>` + this.getAllBoard();
 	}
 }
