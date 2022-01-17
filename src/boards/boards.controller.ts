@@ -1,6 +1,6 @@
-import { Controller, Get, Post, Body, Param, Query, Delete, Patch } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Query, Delete, Patch, UsePipes, ValidationPipe } from '@nestjs/common';
 import { BoardsService } from './boards.service';
-import { Board } from './board.model'
+import { Board, BoardStatus } from './board.model'
 import { CreateBoardDto } from './dto/create-board.dto'
 
 @Controller('boards') //1 요청이 처음 걸러지는곳 (boards)
@@ -21,6 +21,7 @@ export class BoardsController {
 	}
 	
 	@Post() // 테스트를 위한 post 요청은 postman 프로그램을 이용한다.
+	@UsePipes(ValidationPipe) // 파이프를 여기서 사용하겠다 라는 의미이다. 유효성 체크할땐 이 파이프를 쓴다.
 	createBoard(
 		@Body() createBoardDto: CreateBoardDto
 	): Board {

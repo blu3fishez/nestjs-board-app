@@ -39,6 +39,6 @@ export class BoardsService {
 	updateBoardStatus(id: string, status: BoardStatus): Board{
 		const board = this.getBoardById(id);
 		board.status = status;
-		
+		return board;
 	}
 }
